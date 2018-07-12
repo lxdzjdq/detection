@@ -58,9 +58,11 @@ class FakeDetectionModel(model.DetectionModel):
 
   def preprocess(self, inputs):
     """Input preprocessing, resizes images to 28x28.
+
     Args:
       inputs: a [batch, height_in, width_in, channels] float32 tensor
         representing a batch of images with values between 0 and 255.0.
+
     Returns:
       preprocessed_inputs: a [batch, 28, 28, channels] float32 tensor.
     """
@@ -68,8 +70,10 @@ class FakeDetectionModel(model.DetectionModel):
 
   def predict(self, preprocessed_inputs):
     """Prediction tensors from inputs tensor.
+
     Args:
       preprocessed_inputs: a [batch, 28, 28, channels] float32 tensor.
+
     Returns:
       prediction_dict: a dictionary holding prediction tensors to be
         passed to the Loss or Postprocess functions.
@@ -87,10 +91,12 @@ class FakeDetectionModel(model.DetectionModel):
 
   def postprocess(self, prediction_dict, **params):
     """Convert predicted output tensors to final detections. Unused.
+
     Args:
       prediction_dict: a dictionary holding prediction tensors.
       **params: Additional keyword arguments for specific implementations of
         DetectionModel.
+
     Returns:
       detections: a dictionary with empty fields.
     """
@@ -103,10 +109,13 @@ class FakeDetectionModel(model.DetectionModel):
 
   def loss(self, prediction_dict):
     """Compute scalar loss tensors with respect to provided groundtruth.
+
     Calling this function requires that groundtruth tensors have been
     provided via the provide_groundtruth function.
+
     Args:
       prediction_dict: a dictionary holding predicted tensors
+
     Returns:
       a dictionary mapping strings (loss names) to scalar tensors representing
         loss values.
@@ -134,10 +143,12 @@ class FakeDetectionModel(model.DetectionModel):
 
   def restore_map(self, from_detection_checkpoint=True):
     """Returns a map of variables to load from a foreign checkpoint.
+
     Args:
       from_detection_checkpoint: whether to restore from a full detection
         checkpoint (with compatible variable names) or to restore from a
         classification checkpoint for initialization prior to training.
+
     Returns:
       A dict mapping variable names to variables.
     """

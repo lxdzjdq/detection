@@ -13,6 +13,7 @@
 # limitations under the License.
 # ==============================================================================
 """Detection model evaluator.
+
 This file provides a generic evaluation method that can be used to evaluate a
 DetectionModel.
 """
@@ -42,10 +43,12 @@ def _extract_prediction_tensors(model,
                                 create_input_dict_fn,
                                 ignore_groundtruth=False):
   """Restores the model in a tensorflow session.
+
   Args:
     model: model to perform predictions with.
     create_input_dict_fn: function to create input tensor dictionaries.
     ignore_groundtruth: whether groundtruth should be ignored.
+
   Returns:
     tensor_dict: A tensor dictionary with evaluations.
   """
@@ -90,11 +93,13 @@ def _extract_prediction_tensors(model,
 
 def get_evaluators(eval_config, categories):
   """Returns the evaluator class according to eval_config, valid for categories.
+
   Args:
     eval_config: evaluation configurations.
     categories: a list of categories to evaluate.
   Returns:
     An list of instances of DetectionEvaluator.
+
   Raises:
     ValueError: if metric is not in the metric class dictionary.
   """
@@ -110,6 +115,7 @@ def get_evaluators(eval_config, categories):
 def evaluate(create_input_dict_fn, create_model_fn, eval_config, categories,
              checkpoint_dir, eval_dir):
   """Evaluation function for detection models.
+
   Args:
     create_input_dict_fn: a function to create a tensor input dictionary.
     create_model_fn: a function that creates a DetectionModel.
@@ -118,6 +124,7 @@ def evaluate(create_input_dict_fn, create_model_fn, eval_config, categories,
                 have an integer 'id' field and string 'name' field.
     checkpoint_dir: directory to load the checkpoints to evaluate from.
     eval_dir: directory to write evaluation metrics summary to.
+
   Returns:
     metrics: A dictionary containing metric names and values from the latest
       run.
@@ -136,9 +143,11 @@ def evaluate(create_input_dict_fn, create_model_fn, eval_config, categories,
 
   def _process_batch(tensor_dict, sess, batch_index, counters):
     """Evaluates tensors in tensor_dict, visualizing the first K examples.
+
     This function calls sess.run on tensor_dict, evaluating the original_image
     tensor only on the first K examples and visualizing detections overlaid
     on this original_image.
+
     Args:
       tensor_dict: a dictionary of tensors
       sess: tensorflow session
@@ -147,6 +156,7 @@ def evaluate(create_input_dict_fn, create_model_fn, eval_config, categories,
         be updated to keep track of number of successful and failed runs,
         respectively.  If these fields are not updated, then the success/skipped
         counter values shown at the end of evaluation will be incorrect.
+
     Returns:
       result_dict: a dictionary of numpy arrays
     """

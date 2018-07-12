@@ -115,9 +115,11 @@ def replace_variable_values_with_moving_averages(graph,
                                                  current_checkpoint_file,
                                                  new_checkpoint_file):
   """Replaces variable values in the checkpoint with their moving averages.
+
   If the current checkpoint has shadow variables maintaining moving averages of
   the variables defined in the graph, this function generates a new checkpoint
   where the variables contain the values of their moving averages.
+
   Args:
     graph: a tf.Graph object.
     current_checkpoint_file: a checkpoint containing both original variables and
@@ -145,6 +147,7 @@ def _image_tensor_input_placeholder(input_shape=None):
 
 def _tf_example_input_placeholder():
   """Returns input that accepts a batch of strings with tf examples.
+
   Returns:
     a tuple of input placeholder and the output decoded images.
   """
@@ -165,6 +168,7 @@ def _tf_example_input_placeholder():
 
 def _encoded_image_string_tensor_input_placeholder():
   """Returns input that accepts a batch of PNG or JPEG strings.
+
   Returns:
     a tuple of input placeholder and the output decoded images.
   """
@@ -197,6 +201,7 @@ input_placeholder_fn_map = {
 def _add_output_tensor_nodes(postprocessed_tensors,
                              output_collection_name='inference_op'):
   """Adds output nodes for detection boxes and scores.
+
   Adds the following nodes for output tensors -
     * num_detections: float32 tensor of shape [batch_size].
     * detection_boxes: float32 tensor of shape [batch_size, num_boxes, 4]
@@ -208,6 +213,7 @@ def _add_output_tensor_nodes(postprocessed_tensors,
     * detection_masks: (Optional) float32 tensor of shape
       [batch_size, num_boxes, mask_height, mask_width] containing masks for each
       detection box.
+
   Args:
     postprocessed_tensors: a dictionary containing the following fields
       'detection_boxes': [batch, max_detections, 4]
@@ -217,6 +223,7 @@ def _add_output_tensor_nodes(postprocessed_tensors,
         (optional).
       'num_detections': [batch]
     output_collection_name: Name of collection to add output tensors to.
+
   Returns:
     A tensor dict containing the added output tensor nodes.
   """
@@ -242,6 +249,7 @@ def _add_output_tensor_nodes(postprocessed_tensors,
 
 def _write_frozen_graph(frozen_graph_path, frozen_graph_def):
   """Writes frozen graph to disk.
+
   Args:
     frozen_graph_path: Path to write inference graph.
     frozen_graph_def: tf.GraphDef holding frozen graph.
@@ -256,11 +264,13 @@ def _write_saved_model(saved_model_path,
                        inputs,
                        outputs):
   """Writes SavedModel to disk.
+
   If checkpoint_path is not None bakes the weights into the graph thereby
   eliminating the need of checkpoint files during inference. If the model
   was trained with moving averages, setting use_moving_averages to true
   restores the moving averages, otherwise the original set of variables
   is restored.
+
   Args:
     saved_model_path: Path to write SavedModel.
     frozen_graph_def: tf.GraphDef holding frozen graph.
@@ -393,6 +403,7 @@ def export_inference_graph(input_type,
                            output_collection_name='inference_op',
                            additional_output_tensor_names=None):
   """Exports inference graph for the model specified in the pipeline config.
+
   Args:
     input_type: Type of input for the graph. Can be one of [`image_tensor`,
       `tf_example`].

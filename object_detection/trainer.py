@@ -14,6 +14,7 @@
 # ==============================================================================
 
 """Detection model trainer.
+
 This file provides a generic training method that can be used to train a
 DetectionModel.
 """
@@ -38,6 +39,7 @@ def create_input_queue(batch_size_per_clone, create_tensor_dict_fn,
                        batch_queue_capacity, num_batch_queue_threads,
                        prefetch_queue_capacity, data_augmentation_options):
   """Sets up reader, prefetcher and returns input queue.
+
   Args:
     batch_size_per_clone: batch size to use per clone.
     create_tensor_dict_fn: function to create tensor dictionary.
@@ -48,6 +50,7 @@ def create_input_queue(batch_size_per_clone, create_tensor_dict_fn,
     data_augmentation_options: a list of tuples, where each tuple contains a
       data augmentation function and a dictionary containing arguments and their
       values (see preprocessor.py).
+
   Returns:
     input queue: a batcher.BatchQueue object holding enqueued tensor_dicts
       (which hold images, boxes and targets).  To get a batch of tensor_dicts,
@@ -84,6 +87,7 @@ def create_input_queue(batch_size_per_clone, create_tensor_dict_fn,
 
 def get_inputs(input_queue, num_classes, merge_multiple_label_boxes=False):
   """Dequeues batch and constructs inputs to object detection model.
+
   Args:
     input_queue: BatchQueue object holding enqueued tensor_dicts.
     num_classes: Number of classes.
@@ -91,6 +95,7 @@ def get_inputs(input_queue, num_classes, merge_multiple_label_boxes=False):
       or not. Defaults to false. Merged boxes are represented with a single
       box and a k-hot encoding of the multiple labels associated with the
       boxes.
+
   Returns:
     images: a list of 3-D float tensor of images.
     image_keys: a list of string keys for the images.
@@ -134,6 +139,7 @@ def get_inputs(input_queue, num_classes, merge_multiple_label_boxes=False):
 
 def _create_losses(input_queue, create_model_fn, train_config):
   """Creates loss function for a DetectionModel.
+
   Args:
     input_queue: BatchQueue object holding enqueued tensor_dicts.
     create_model_fn: A function to create the DetectionModel.
@@ -167,6 +173,7 @@ def train(create_tensor_dict_fn, create_model_fn, train_config, master, task,
           num_clones, worker_replicas, clone_on_cpu, ps_tasks, worker_job_name,
           is_chief, train_dir):
   """Training function for detection models.
+
   Args:
     create_tensor_dict_fn: a function to create a tensor input dictionary.
     create_model_fn: a function that creates a DetectionModel and generates

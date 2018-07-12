@@ -33,6 +33,7 @@ slim = tf.contrib.slim
 
 def write_metrics(metrics, global_step, summary_dir):
   """Write metrics to a summary directory.
+
   Args:
     metrics: A dictionary containing metric names and values.
     global_step: Global step at which the metrics are computed.
@@ -62,10 +63,12 @@ def visualize_detection_results(result_dict,
                                 min_score_thresh=.5,
                                 max_num_predictions=20):
   """Visualizes detection results and writes visualizations to image summaries.
+
   This function visualizes an image with its detected bounding boxes and writes
   to image summaries which can be viewed on tensorboard.  It optionally also
   writes images to a directory. In the case of missing entry in the label map,
   unknown class name in the visualization is shown as "N/A".
+
   Args:
     result_dict: a dictionary holding groundtruth and detection
       data corresponding to each image being evaluated.  The following keys
@@ -176,9 +179,11 @@ def _run_checkpoint_once(tensor_dict,
                          save_graph=False,
                          save_graph_dir=''):
   """Evaluates metrics defined in evaluators.
+
   This function loads the latest checkpoint in checkpoint_dirs and evaluates
   all metrics defined in evaluators. The metrics are processed in batch by the
   batch_processor.
+
   Args:
     tensor_dict: a dictionary holding tensors representing a batch of detections
       and corresponding groundtruth annotations.
@@ -211,9 +216,11 @@ def _run_checkpoint_once(tensor_dict,
     save_graph: whether or not the Tensorflow graph is stored as a pbtxt file.
     save_graph_dir: where to store the Tensorflow graph on disk. If save_graph
       is True this must be non-empty.
+
   Returns:
     global_step: the count of global steps.
     all_evaluator_metrics: A dictionary containing metric names and values.
+
   Raises:
     ValueError: if restore_fn is None and checkpoint_dirs doesn't have at least
       one element.
@@ -296,10 +303,12 @@ def repeated_checkpoint_run(tensor_dict,
                             save_graph=False,
                             save_graph_dir=''):
   """Periodically evaluates desired tensors using checkpoint_dirs or restore_fn.
+
   This function repeatedly loads a checkpoint and evaluates a desired
   set of tensors (provided by tensor_dict) and hands the resulting numpy
   arrays to a function result_processor which can be used to further
   process/save/visualize the results.
+
   Args:
     tensor_dict: a dictionary holding tensors representing a batch of detections
       and corresponding groundtruth annotations.
@@ -332,9 +341,11 @@ def repeated_checkpoint_run(tensor_dict,
     save_graph: whether or not the Tensorflow graph is saved as a pbtxt file.
     save_graph_dir: where to save on disk the Tensorflow graph. If store_graph
       is True this must be non-empty.
+
   Returns:
     metrics: A dictionary containing metric names and values in the latest
       evaluation.
+
   Raises:
     ValueError: if max_num_of_evaluations is not None or a positive number.
     ValueError: if checkpoint_dirs doesn't have at least one element.
@@ -389,9 +400,11 @@ def result_dict_for_single_example(image,
                                    class_agnostic=False,
                                    scale_to_absolute=False):
   """Merges all detection and groundtruth information for a single example.
+
   Note that evaluation tools require classes that are 1-indexed, and so this
   function performs the offset. If `class_agnostic` is True, all output classes
   have label 1.
+
   Args:
     image: A single 4D image tensor of shape [1, H, W, C].
     key: A single string tensor identifying the image.
@@ -413,6 +426,7 @@ def result_dict_for_single_example(image,
       be scaled to absolute coordinates. Note that for IoU based evaluations,
       it does not matter whether boxes are expressed in absolute or relative
       coordinates. Default False.
+
   Returns:
     A dictionary with:
     'original_image': A [1, H, W, C] uint8 image tensor.
@@ -435,6 +449,7 @@ def result_dict_for_single_example(image,
     'groundtruth_group_of': [num_boxes] int64 tensor. (Optional)
     'groundtruth_instance_masks': 3D int64 tensor of instance masks
       (Optional).
+
   """
   label_id_offset = 1  # Applying label id offset (b/63711816)
 
