@@ -14,26 +14,21 @@
 # ==============================================================================
 
 r"""Evaluation executable for detection models.
-
 This executable is used to evaluate DetectionModels. There are two ways of
 configuring the eval job.
-
 1) A single pipeline_pb2.TrainEvalPipelineConfig file maybe specified instead.
 In this mode, the --eval_training_data flag may be given to force the pipeline
 to evaluate on training data instead.
-
 Example usage:
     ./eval \
         --logtostderr \
         --checkpoint_dir=path/to/checkpoint_dir \
         --eval_dir=path/to/eval_dir \
         --pipeline_config_path=pipeline_config.pbtxt
-
 2) Three configuration files may be provided: a model_pb2.DetectionModel
 configuration file to define what type of DetectionModel is being evaluated, an
 input_reader_pb2.InputReader file to specify what data the model is evaluating
 and an eval_pb2.EvalConfig file to configure evaluation parameters.
-
 Example usage:
     ./eval \
         --logtostderr \
@@ -48,8 +43,7 @@ import os
 import tensorflow as tf
 
 from object_detection import evaluator
-from object_detection.builders import dataset_builder
-from object_detection.builders import graph_rewriter_builder
+from object_detection.builders import input_reader_builder
 from object_detection.builders import model_builder
 from object_detection.utils import config_util
 from object_detection.utils import label_map_util
@@ -104,20 +98,19 @@ def main(unused_argv):
 
   model_config = configs['model']
   eval_config = configs['eval_config']
-  input_config = configs['eval_input_config']
   if FLAGS.eval_training_data:
     input_config = configs['train_input_config']
+  else:
+    input_config = configs['eval_input_config']
 
   model_fn = functools.partial(
       model_builder.build,
       model_config=model_config,
       is_training=False)
 
-  def get_next(config):
-    return dataset_builder.make_initializable_iterator(
-        dataset_builder.build(config)).get_next()
-
-  create_input_dict_fn = functools.partial(get_next, input_config)
+  create_input_dict_fn = functools.partial(
+      input_reader_builder.build,
+      input_config)
 
   label_map = label_map_util.load_labelmap(input_config.label_map_path)
   max_num_classes = max([item.id for item in label_map.item])
@@ -127,19 +120,8 @@ def main(unused_argv):
   if FLAGS.run_once:
     eval_config.max_evals = 1
 
-  graph_rewriter_fn = None
-  if 'graph_rewriter_config' in configs:
-    graph_rewriter_fn = graph_rewriter_builder.build(
-        configs['graph_rewriter_config'], is_training=False)
-
-  evaluator.evaluate(
-      create_input_dict_fn,
-      model_fn,
-      eval_config,
-      categories,
-      FLAGS.checkpoint_dir,
-      FLAGS.eval_dir,
-      graph_hook_fn=graph_rewriter_fn)
+  evaluator.evaluate(create_input_dict_fn, model_fn, eval_config, categories,
+                     FLAGS.checkpoint_dir, FLAGS.eval_dir)
 
 
 if __name__ == '__main__':
